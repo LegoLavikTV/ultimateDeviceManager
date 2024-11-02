@@ -14,74 +14,44 @@ with open(encrypted_key_file, "rb") as file:
 key_decrypted = cipher_suite.decrypt(key_encrypted)
 check_key = key_decrypted.decode('utf-8')
 
+def validate_part(part, checks):
+    """Helper function to validate a single part against a set of checks."""
+    for check in checks:
+        if not check(part):
+            return False
+    return True
 def validate_key(key):
     if len(key) != 80:
         print("Invalid key format: Should be exactly 80 characters long.")
         return False
-
-    parts = [key[i:i+8] for i in range(0, 80, 8)]
-
-    # Part 1 validation: At least two uppercase and two lowercase letters
-    part1 = parts[0]
-    if not re.match(r"^[A-Za-z0-9]{8}$", part1) or sum(c.isupper() for c in part1) < 2 or sum(c.islower() for c in part1) < 2:
-        print("Part 1 failed:", part1)
-        return False
-
-    # Part 2 validation: ASCII sum divisible by 7 with at least two digits
-    part2 = parts[1]
-    if not re.match(r"^[A-Za-z0-9]{8}$", part2) or sum(c.isdigit() for c in part2) < 2 or sum(ord(c) for c in part2) % 7 != 0:
-        print("Part 2 failed:", part2)
-        return False
-
-    # Part 3 validation: At least two special characters
-    part3 = parts[2]
-    if not re.match(r"^[A-Za-z0-9@#!$]{8}$", part3) or sum(c in "@#!$" for c in part3) < 2:
-        print("Part 3 failed:", part3)
-        return False
-
-    # Part 4 validation: Eight lowercase letters, starts and ends the same
-    part4 = parts[3]
-    if not re.match(r"^[a-z]{8}$", part4) or part4[0] != part4[-1]:
-        print("Part 4 failed:", part4)
-        return False
-
-    # Part 5 validation: Numeric portion divisible by 5
-    part5 = parts[4]
-    if not re.match(r"^[A-Za-z0-9]{8}$", part5) or int(''.join(filter(str.isdigit, part5)) or "0") % 5 != 0:
-        print("Part 5 failed:", part5)
-        return False
-
-    # Part 6 validation: At least three uppercase letters
-    part6 = parts[5]
-    if not re.match(r"^[A-Za-z0-9]{8}$", part6) or sum(c.isupper() for c in part6) < 3:
-        print("Part 6 failed:", part6)
-        return False
-
-    # Part 7 validation: One special character and lowercase letters
-    part7 = parts[6]
-    if not re.match(r"^[a-z@#!$]{8}$", part7) or sum(c in "@#!$" for c in part7) != 1:
-        print("Part 7 failed:", part7)
-        return False
-
-    # Part 8 validation: Only lowercase letters or digits
-    part8 = parts[7]
-    if not re.match(r"^[a-z0-9]{8}$", part8):
-        print("Part 8 failed:", part8)
-        return False
-
-    # Part 9 validation: Uppercase ASCII sum divisible by 3
-    part9 = parts[8]
-    if not re.match(r"^[A-Z]{8}$", part9) or sum(ord(c) for c in part9) % 3 != 0:
-        print("Part 9 failed:", part9)
-        return False
-
-    # Part 10 validation: Eight digits, sum of digits equals 30
-    part10 = parts[9]
-    if not re.match(r"^\d{8}$", part10) or sum(int(c) for c in part10) != 30:
-        print("Part 10 failed:", part10)
-        return False
+    parts = [key[i:i + 8] for i in range(0, 80, 8)]
+    validation_checks = [
+        # Part 1 checks: At least two uppercase and two lowercase letters
+        lambda p: re.match(r"^[A-Za-z0-9]{8}$", p) and sum(c.isupper() for c in p) >= 2 and sum(c.islower() for c in p) >= 2,
+        # Part 2 checks: ASCII sum divisible by 7 with at least two digits
+        lambda p: re.match(r"^[A-Za-z0-9]{8}$", p) and sum(c.isdigit() for c in p) >= 2 and sum(ord(c) for c in p) % 7 == 0,
+        # Part 3 checks: At least two special characters
+        lambda p: re.match(r"^[A-Za-z0-9@#!$]{8}$", p) and sum(c in "@#!$" for c in p) >= 2,
+        # Part 4 checks: Eight lowercase letters, starts and ends the same
+        lambda p: re.match(r"^[a-z]{8}$", p) and p[0] == p[-1],
+        # Part 5 checks: Numeric portion divisible by 5
+        lambda p: re.match(r"^[A-Za-z0-9]{8}$", p) and int(''.join(filter(str.isdigit, p)) or "0") % 5 == 0,
+        # Part 6 checks: At least three uppercase letters
+        lambda p: re.match(r"^[A-Za-z0-9]{8}$", p) and sum(c.isupper() for c in p) >= 3,
+        # Part 7 checks: One special character and lowercase letters
+        lambda p: re.match(r"^[a-z@#!$]{8}$", p) and sum(c in "@#!$" for c in p) == 1,
+        # Part 8 checks: Only lowercase letters or digits
+        lambda p: re.match(r"^[a-z0-9]{8}$", p),
+        # Part 9 checks: Uppercase ASCII sum divisible by 3
+        lambda p: re.match(r"^[A-Z]{8}$", p) and sum(ord(c) for c in p) % 3 == 0,
+        # Part 10 checks: Eight digits, sum of digits equals 30
+        lambda p: re.match(r"^\d{8}$", p) and sum(int(c) for c in p) == 30,
+    ]
+    for i, (part, checks) in enumerate(zip(parts, validation_checks)):
+        if not validate_part(part, [checks]):
+            print(f"Part {i + 1} failed:", part)
+            return False
     return True
-
 print("Is the key valid:", validate_key(check_key))
 def remove_file(file_name):
     if os.path.exists(file_name):
