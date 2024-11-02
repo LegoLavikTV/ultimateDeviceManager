@@ -1,5 +1,7 @@
 import random
 import string
+import os
+from cryptography.fernet import Fernet
 
 def generate_key():
     parts = []
@@ -74,4 +76,21 @@ def generate_key():
     return key
 
 generated_key = generate_key()
-print("Generated Key:", generated_key)
+
+encryption_key_file = "encryption_key.bin"
+encrypted_key_file = "encrypted_key.bin"
+def remove_file(file_name):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+remove_file(encryption_key_file)
+remove_file(encrypted_key_file)
+
+encryption_key = Fernet.generate_key()
+cipher_suite = Fernet(encryption_key)
+key_bytes = generated_key.encode('utf-8')
+key_encrypted = cipher_suite.encrypt(key_bytes)
+
+with open("encryption_key.bin", "wb") as file:
+    file.write(encryption_key)  # Save as bytes
+with open("encrypted_key.bin", "wb") as file:
+    file.write(key_encrypted)

@@ -1,6 +1,19 @@
 import re
+import os
+from cryptography.fernet import Fernet
 
-generated_key = ""
+encryption_key_file = "encryption_key.bin"
+encrypted_key_file = "encrypted_key.bin"
+
+with open(encryption_key_file, "rb") as file:
+    encryption_key = file.read().decode()
+cipher_suite = Fernet(encryption_key)
+with open(encrypted_key_file, "rb") as file:
+    key_encrypted = file.read()
+
+key_decrypted = cipher_suite.decrypt(key_encrypted)
+check_key = key_decrypted.decode('utf-8')
+
 def validate_key(key):
     if len(key) != 80:
         print("Invalid key format: Should be exactly 80 characters long.")
@@ -67,9 +80,11 @@ def validate_key(key):
     if not re.match(r"^\d{8}$", part10) or sum(int(c) for c in part10) != 30:
         print("Part 10 failed:", part10)
         return False
-
-    print("Key is valid.")
     return True
 
-# Validate the generated key
-print("Is the key valid:", validate_key(generated_key))
+print("Is the key valid:", validate_key(check_key))
+def remove_file(file_name):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+remove_file(encryption_key_file)
+remove_file(encrypted_key_file)
