@@ -66,6 +66,7 @@ def start_client(server_ip):
         auth_result = client.recv(1024).decode('utf-8')
         if auth_result == "AUTH_SUCCESS":
             print("Authentication successful.")
+
         else:
             print("Authentication failed.")
             client.close()
